@@ -1,0 +1,182 @@
+definitions:
+  internal.Person:
+    properties:
+      age:
+        type: integer
+      gender:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      nationality:
+        type: string
+      surname:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /create:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new person and enriches data via external APIs
+      parameters:
+      - description: Name of the person
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: Surname of the person
+        in: query
+        name: surname
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal.Person'
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new person
+      tags:
+      - people
+  /delete:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a person by ID
+      parameters:
+      - description: ID of the person to delete
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a person
+      tags:
+      - people
+  /get:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves list of people with optional filtering and pagination
+      parameters:
+      - description: Filter by name
+        in: query
+        name: name
+        type: string
+      - description: Filter by surname
+        in: query
+        name: surname
+        type: string
+      - description: Exact age filter
+        in: query
+        name: age
+        type: integer
+      - description: Minimum age
+        in: query
+        name: age_min
+        type: integer
+      - description: Maximum age
+        in: query
+        name: age_max
+        type: integer
+      - description: Filter by gender
+        in: query
+        name: gender
+        type: string
+      - description: Filter by nationality
+        in: query
+        name: nationality
+        type: string
+      - default: 10
+        description: Limit per page
+        in: query
+        name: limit
+        type: integer
+      - default: 0
+        description: Page offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/internal.Person'
+              type: array
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all people with filters
+      tags:
+      - people
+  /update:
+    put:
+      consumes:
+      - application/json
+      description: Updates a person by ID using enriched data from external APIs
+      parameters:
+      - description: ID of the person to update
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: New name of the person
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: New surname of the person
+        in: query
+        name: surname
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal.Person'
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update an existing person
+      tags:
+      - people
+swagger: "2.0"
